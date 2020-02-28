@@ -8,4 +8,8 @@ Makes use of the IsThereAnyDeal API available here: https://itad.docs.apiary.io/
 * Run `npm install`
 * Run `npm start`
 
+# Running the unit tests
+* Run `npm install` (if you haven't already)
+* Run `npm test`
+
 Ez pz
