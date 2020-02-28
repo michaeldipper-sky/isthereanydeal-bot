@@ -2,6 +2,7 @@
 const Discord = require('discord.io');
 const logger = require('winston');
 const auth = require('../auth.json');
+const matcher = require('./matcher');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -28,21 +29,8 @@ bot.on('ready', () => {
 bot.on('message', (user, userID, channelID, message) => {
   logger.debug(`Message received: ${message}`);
 
-  // Our bot needs to know if it will execute a command
-  // We match on {} pairs
-  const regexp = /\{.*?\}/g;
-  const commands = [];
-
-  let messageMatch = regexp.exec(message);
-
-  while (messageMatch) {
-    const cmd = messageMatch[0].replace(/{|}/g, '');
-    // Add unique commands
-    if (!commands.includes(cmd)) commands.push(cmd);
-
-    // Look for the next match, if any
-    messageMatch = regexp.exec(message);
-  }
+  // Use the regex matcher to get the commands
+  const commands = matcher(message);
 
   // Run the ITAD logic for each match
   commands.forEach((cmd) => {
