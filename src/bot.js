@@ -3,6 +3,7 @@ const Discord = require('discord.io');
 const logger = require('winston');
 const auth = require('../auth.json');
 const matcher = require('./matcher');
+const itad = require('./itad');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -18,6 +19,13 @@ const bot = new Discord.Client({
   token: auth.token,
   autorun: true,
 });
+
+function sendMessage(channelID, message) {
+  bot.sendMessage({
+    to: channelID,
+    message,
+  });
+}
 
 logger.debug('Initialised');
 
@@ -38,13 +46,17 @@ bot.on('message', (user, userID, channelID, message) => {
 
     switch (cmd) {
       case 'ping':
-        bot.sendMessage({
-          to: channelID,
-          message: 'Pong!',
-        });
+        sendMessage(channelID, 'pong');
         break;
-        // Just add any case commands if you want to..
       default: {
+        logger.debug(`Attemping to find game data for ${cmd}`);
+
+        itad(cmd).then((gamePrice) => {
+          logger.info(`Got data for ${cmd}: ${gamePrice.name} (called by ${user})`);
+          sendMessage(channelID, `${gamePrice.name}: ${gamePrice.currentPrice} at ${gamePrice.currentStore}\n${gamePrice.currentURL}\nLowest historical price: ${gamePrice.lowestPrice} at ${gamePrice.lowestStore}`);
+        }).catch(() => {
+          sendMessage(channelID, `Couldn't find a match for ${cmd}`);
+        });
         break;
       }
     }

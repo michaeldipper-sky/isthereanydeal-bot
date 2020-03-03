@@ -5,6 +5,7 @@
   "main": "bot.js",
   "author": "Michael Dipper",
   "dependencies": {
+    "axios": "^0.19.2",
     "discord.io": "github:Woor/discord.io#gateway_v6",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
