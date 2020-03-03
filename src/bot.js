@@ -1,6 +1,7 @@
 
 const Discord = require('discord.io');
 const logger = require('winston');
+const http = require('http');
 const auth = require('../auth.json');
 const matcher = require('./matcher');
 const itad = require('./itad');
@@ -11,7 +12,7 @@ logger.add(new logger.transports.Console(), {
   colorize: true,
 });
 
-logger.level = 'info';
+logger.level = 'debug';
 logger.info('Starting bot...');
 
 // Initialize Discord Bot
@@ -34,6 +35,11 @@ function prettifyName(name) {
 logger.debug('Initialised');
 
 bot.on('ready', () => {
+  // create a basic HTTP server so Azure won't turn off the app :)
+  http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello World!');
+  }).listen(8080);
   logger.info('Bot connected and ready!');
   logger.debug(`Logged in as: ${bot.username} - (${bot.id})`);
 });
