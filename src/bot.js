@@ -27,6 +27,10 @@ function sendMessage(channelID, message) {
   });
 }
 
+function prettifyName(name) {
+  return name.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+}
+
 logger.debug('Initialised');
 
 bot.on('ready', () => {
@@ -53,7 +57,7 @@ bot.on('message', (user, userID, channelID, message) => {
 
         itad(cmd).then((gamePrice) => {
           logger.info(`Got data for ${cmd}: ${gamePrice.name} (called by ${user})`);
-          sendMessage(channelID, `${gamePrice.name}: ${gamePrice.currentPrice} at ${gamePrice.currentStore}\n${gamePrice.currentURL}\nLowest historical price: ${gamePrice.lowestPrice} at ${gamePrice.lowestStore}`);
+          sendMessage(channelID, `${prettifyName(cmd)}: ${gamePrice.currentPrice} at ${gamePrice.currentStore}\n${gamePrice.currentURL}\nLowest historical price: ${gamePrice.lowestPrice} at ${gamePrice.lowestStore}`);
         }).catch(() => {
           sendMessage(channelID, `Couldn't find a match for ${cmd}`);
         });
