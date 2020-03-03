@@ -12,7 +12,7 @@ logger.add(new logger.transports.Console(), {
   colorize: true,
 });
 
-logger.level = 'debug';
+logger.level = 'info';
 logger.info('Starting bot...');
 
 // Initialize Discord Bot
