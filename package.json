@@ -1,0 +1,21 @@
+{
+  "name": "isthereanydeal-bot",
+  "version": "1.0.0",
+  "description": "Discord Bot for integrating IsThereAnyDeal.com",
+  "main": "bot.js",
+  "author": "Michael Dipper",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "discord.io": "github:Woor/discord.io#gateway_v6",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.8.0",
+    "jest": "^25.1.0",
+    "winston": "^3.2.1"
+  },
+  "scripts": {
+    "start": "node src/bot.js",
+    "test": "jest"
+  }
+}
