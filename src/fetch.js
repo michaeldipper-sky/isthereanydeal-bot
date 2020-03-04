@@ -1,12 +1,11 @@
 const axios = require('axios');
 
 const plainPath = 'v02/game/plain/?title=';
-// to-do: populate store fronts from storefronts.json
-const pricePath = 'v01/game/overview/?region=uk&country=UK&shop=steam,humblestore&plains=';
+const pricePath = 'v01/game/overview/?region=uk&country=UK&plains=';
 
 function buildURL(path) {
-  const baseURL = 'https://api.isthereanydeal.com/';
-  const APIKey = '3829171ce89f084f86464626db190900276d658d';
+  const baseURL = process.env.ITAD_BASE_URL || 'https://api.isthereanydeal.com/';
+  const APIKey = process.env.ITAD_API_KEY || '';
   const url = `${baseURL}${path}&key=${APIKey}`;
   return url;
 }
