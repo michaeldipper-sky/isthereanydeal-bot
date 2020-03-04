@@ -1,8 +1,0 @@
-{
-    "appService.zipIgnorePattern": [
-        "node_modules{,/**}",
-        ".vscode{,/**}"
-    ],
-    "appService.defaultWebAppToDeploy": "/subscriptions/8f5736c3-e6f9-4c89-80c3-41c1013dc7d7/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/IsThereAnyDealDiscordBot",
-    "appService.deploySubpath": ""
-}

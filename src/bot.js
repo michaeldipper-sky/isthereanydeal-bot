@@ -35,11 +35,18 @@ function prettifyName(name) {
 logger.debug('Initialised');
 
 bot.on('ready', () => {
+  // heroku sets a value for process.env.PORT
+  let port = process.env.PORT;
+  // but we need to set a manual one for running locally
+  if (port == null || port === '') {
+    port = 8000;
+  }
+
   // create a basic HTTP server so Azure won't turn off the app :)
   http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Hello World!');
-  }).listen(8080);
+  }).listen(port);
   logger.info('Bot connected and ready!');
   logger.debug(`Logged in as: ${bot.username} - (${bot.id})`);
 });
