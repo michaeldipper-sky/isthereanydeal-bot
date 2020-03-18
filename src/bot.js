@@ -1,9 +1,9 @@
-
 const Discord = require('discord.io');
 const logger = require('winston');
-const http = require('http');
 const matcher = require('./matcher');
 const itad = require('./itad');
+const createHTTPServer = require('./http');
+const { formatPriceMessage } = require('./util/format');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -20,6 +20,8 @@ const bot = new Discord.Client({
   autorun: true,
 });
 
+logger.debug('Initialised');
+
 function sendMessage(channelID, message) {
   bot.sendMessage({
     to: channelID,
@@ -27,25 +29,10 @@ function sendMessage(channelID, message) {
   });
 }
 
-function prettifyName(name) {
-  return name.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
-}
-
-logger.debug('Initialised');
-
 bot.on('ready', () => {
-  // heroku sets a value for process.env.PORT
-  let port = process.env.PORT;
-  // but we need to set a manual one for running locally
-  if (port == null || port === '') {
-    port = 8000;
-  }
+  // create a basic HTTP server so Heroku won't turn off the app :)
+  createHTTPServer();
 
-  // create a basic HTTP server so Azure won't turn off the app :)
-  http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello World!');
-  }).listen(port);
   logger.info('Bot connected and ready!');
   logger.debug(`Logged in as: ${bot.username} - (${bot.id})`);
 });
@@ -66,23 +53,21 @@ bot.on('message', (user, userID, channelID, message) => {
       default: {
         // run the ITAD logic for each match
         logger.debug(`Attemping to find game data for ${cmd}`);
-
+        let reply;
         itad(cmd)
           .then((gamePrice) => {
-            logger.info(
-              `Got data for ${cmd}: ${gamePrice.name} (called by ${user})`,
-            );
-            sendMessage(
-              channelID,
-              `${prettifyName(cmd)}: ${gamePrice.currentPrice} at ${
-                gamePrice.currentStore
-              }\n${gamePrice.currentURL}\nLowest historical price: ${
-                gamePrice.lowestPrice
-              } at ${gamePrice.lowestStore}`,
-            );
+            if (gamePrice === 'NO_ITAD') {
+              reply = "Couldn't connect to ITAD. Please try again later.";
+              logger.info(reply);
+              sendMessage(channelID, reply);
+            } else {
+              logger.info(`Got data for ${cmd}: ${gamePrice.name} (called by ${user})`);
+              sendMessage(channelID, formatPriceMessage(cmd, gamePrice));
+            }
           })
           .catch(() => {
-            sendMessage(channelID, `Couldn't find a match for ${cmd}`);
+            reply = `Couldn't find a match for ${cmd}`;
+            sendMessage(channelID, reply);
           });
         break;
       }

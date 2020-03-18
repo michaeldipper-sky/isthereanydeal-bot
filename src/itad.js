@@ -1,21 +1,5 @@
 const { fetchPlain, fetchPrices } = require('./fetch');
-
-function formatPriceData(priceData) {
-  // take the response from the price endpoint and grab the desired stuff
-  const priceEntries = Object.entries(priceData);
-  const gameOne = priceEntries[0];
-
-  const formatted = {
-    name: gameOne[0],
-    lowestPrice: `${gameOne[1].lowest.price_formatted}`.replace('&pound;', '£'),
-    lowestStore: gameOne[1].lowest.store,
-    currentPrice: `${gameOne[1].price.price_formatted}`.replace('&pound;', '£'),
-    currentStore: gameOne[1].price.store,
-    currentURL: gameOne[1].price.url,
-  };
-
-  return formatted;
-}
+const { formatPriceData } = require('./util/format');
 
 function isThereAnyDeal(game) {
   // hit the API to find the plain for the specified game
@@ -38,7 +22,7 @@ function isThereAnyDeal(game) {
     }
     // else quit out
     return null;
-  });
+  }).catch(() => 'NO_ITAD');
 }
 
 module.exports = isThereAnyDeal;

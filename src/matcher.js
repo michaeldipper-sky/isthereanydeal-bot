@@ -1,18 +1,20 @@
+const findCurlyBracesRegex = /\{.*?\}/g;
+const removeCurlyBracesRegex = /{|}/g;
+
 function matcher(message) {
   // our bot needs to know if it will execute a command
   // we match on {} pairs
-  const regexp = /\{.*?\}/g;
   const commands = [];
 
-  let messageMatch = regexp.exec(message);
+  let messageMatch = findCurlyBracesRegex.exec(message);
 
   while (messageMatch) {
-    const cmd = messageMatch[0].replace(/{|}/g, '');
+    const cmd = messageMatch[0].replace(removeCurlyBracesRegex, '');
     // only add unique commands
     if (!commands.includes(cmd)) commands.push(cmd);
 
     // look for the next match, if any
-    messageMatch = regexp.exec(message);
+    messageMatch = findCurlyBracesRegex.exec(message);
   }
 
   return commands;
