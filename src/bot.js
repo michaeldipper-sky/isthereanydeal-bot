@@ -65,13 +65,14 @@ bot.on('message', (user, userID, channelID, message) => {
               reply = formatPriceMessage(cmd, gamePrice);
               logger.info(`Got data for ${cmd}: ${gamePrice.name} (called by ${user})`);
             }
-
-            // log the reply and send it
-            logger.debug(reply);
-            sendMessage(channelID, reply);
           })
           .catch(() => {
+            // no response from the API
             reply = `Couldn't find a match for ${cmd}`;
+          })
+          .finally(() => {
+            // log the reply and send it
+            logger.debug(reply);
             sendMessage(channelID, reply);
           });
         break;
