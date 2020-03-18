@@ -56,14 +56,19 @@ bot.on('message', (user, userID, channelID, message) => {
         let reply;
         itad(cmd)
           .then((gamePrice) => {
-            if (gamePrice === 'NO_ITAD') {
+            // build the reply based on the respose from the API
+            if (gamePrice === 'PARSE_ERROR') {
+              reply = 'Error parsing price data. The game may not be for sale.';
+            } else if (gamePrice === 'NO_ITAD') {
               reply = "Couldn't connect to ITAD. Please try again later.";
-              logger.info(reply);
-              sendMessage(channelID, reply);
             } else {
+              reply = formatPriceMessage(cmd, gamePrice);
               logger.info(`Got data for ${cmd}: ${gamePrice.name} (called by ${user})`);
-              sendMessage(channelID, formatPriceMessage(cmd, gamePrice));
             }
+
+            // log the reply and send it
+            logger.debug(reply);
+            sendMessage(channelID, reply);
           })
           .catch(() => {
             reply = `Couldn't find a match for ${cmd}`;

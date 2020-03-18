@@ -22,7 +22,12 @@ function isThereAnyDeal(game) {
     }
     // else quit out
     return null;
-  }).catch(() => 'NO_ITAD');
+  }).catch((e) => {
+    if (e.constructor === TypeError) {
+      return 'PARSE_ERROR';
+    }
+    return 'NO_ITAD';
+  });
 }
 
 module.exports = isThereAnyDeal;
