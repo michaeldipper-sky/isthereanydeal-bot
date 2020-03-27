@@ -2,6 +2,7 @@ const axios = require('axios');
 
 const plainPath = 'v02/game/plain/?title=';
 const pricePath = 'v01/game/overview/?region=uk&country=UK&plains=';
+const searchPath = 'v01/search/search/?offset=0&limit=1&region=uk&country=UK&q=';
 
 function buildURL(path) {
   const baseURL = process.env.ITAD_BASE_URL || 'https://api.isthereanydeal.com/';
@@ -22,4 +23,8 @@ function fetchPrices(plain) {
   return fetch(pricePath + plain);
 }
 
-module.exports = { fetchPlain, fetchPrices };
+function fetchSearchResult(title) {
+  return fetch(searchPath + title);
+}
+
+module.exports = { fetchPlain, fetchPrices, fetchSearchResult };

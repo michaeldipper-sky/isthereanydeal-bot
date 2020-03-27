@@ -1,7 +1,7 @@
 const Discord = require('discord.io');
 const logger = require('winston');
 const matcher = require('./matcher');
-const itad = require('./itad');
+const { isThereAnyDeal, searchForTitle } = require('./itad');
 const createHTTPServer = require('./http');
 const { formatPriceMessage } = require('./util/format');
 
@@ -54,21 +54,30 @@ bot.on('message', (user, userID, channelID, message) => {
         // run the ITAD logic for each match
         logger.debug(`Attemping to find game data for ${cmd}`);
         let reply;
-        itad(cmd)
+        isThereAnyDeal(cmd)
           .then((gamePrice) => {
             // build the reply based on the respose from the API
             if (gamePrice === 'PARSE_ERROR') {
-              reply = 'Error parsing price data. The game may not be for sale.';
-            } else if (gamePrice === 'NO_ITAD') {
-              reply = "Couldn't connect to ITAD. Please try again later.";
+              return searchForTitle(cmd);
+            }
+            if (gamePrice === 'NO_ITAD') {
+              reply = "Couldn't connect to ITAD :grimacing: Please try again later!";
             } else {
               reply = formatPriceMessage(cmd, gamePrice);
               logger.info(`Got data for ${cmd}: ${gamePrice.name} (called by ${user})`);
             }
+            return 'NOT_REQUIRED';
+          })
+          .then((searchResult) => {
+            if (searchResult === 'SEARCH_ERROR') {
+              reply = 'Error parsing price data. The game may not be for sale.';
+            } else if (searchResult !== 'NOT_REQUIRED') {
+              reply = `Couldn't find that :thinking: Did you mean ${searchResult}?`;
+            }
           })
           .catch(() => {
-            // no response from the API
-            reply = `Couldn't find a match for ${cmd}`;
+            // no match from the API
+            reply = `Couldn't find a match for ${cmd} :disappointed:`;
           })
           .finally(() => {
             // log the reply and send it
