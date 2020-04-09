@@ -1,4 +1,4 @@
-const Discord = require('discord.io');
+const Discord = require('discord.js');
 const logger = require('winston');
 const matcher = require('./matcher');
 const { isThereAnyDeal, searchForTitle } = require('./itad');
@@ -15,44 +15,38 @@ logger.level = process.env.LOGGER_MODE || 'info';
 logger.info('Starting bot...');
 
 // Initialize Discord Bot
-const bot = new Discord.Client({
-  token: process.env.DISCORD_TOKEN || '',
-  autorun: true,
-});
+const bot = new Discord.Client();
+bot.login(process.env.DISCORD_TOKEN || '');
 
 logger.debug('Initialised');
-
-function sendMessage(channelID, message) {
-  bot.sendMessage({
-    to: channelID,
-    message,
-  });
-}
 
 bot.on('ready', () => {
   // create a basic HTTP server so Heroku won't turn off the app :)
   createHTTPServer();
 
   logger.info('Bot connected and ready!');
-  logger.debug(`Logged in as: ${bot.username} - (${bot.id})`);
+  logger.debug(`Logged in as: ${bot.user.tag} - (${bot.user.id})`);
 });
 
-bot.on('message', (user, userID, channelID, message) => {
-  logger.debug(`Message received: ${message}`);
+bot.on('message', (msg) => {
+  if (msg.author.id !== '682941502673911871') logger.debug(`Message received: ${msg.content}`);
 
   // use the regex matcher to get the commands
-  const commands = matcher(message);
+  const commands = matcher(msg.content);
 
   commands.forEach((cmd) => {
     logger.debug(`Executing command: ${cmd}`);
 
     switch (cmd) {
       case 'ping':
-        sendMessage(channelID, 'pong');
+        logger.debug('pong');
+        msg.channel.send('pong');
         break;
       default: {
         // run the ITAD logic for each match
-        logger.debug(`Attemping to find game data for ${cmd}`);
+        logger.debug(
+          `Attemping to find game data for ${cmd} (called by ${msg.author.tag})`,
+        );
         let reply;
         isThereAnyDeal(cmd)
           .then((gamePrice) => {
@@ -64,7 +58,7 @@ bot.on('message', (user, userID, channelID, message) => {
               reply = "Couldn't connect to ITAD :grimacing: Please try again later!";
             } else {
               reply = formatPriceMessage(cmd, gamePrice);
-              logger.info(`Got data for ${cmd}: ${gamePrice.name} (called by ${user})`);
+              logger.info(`Got data for ${cmd}: ${gamePrice.name}`);
             }
             return 'NOT_REQUIRED';
           })
@@ -82,7 +76,7 @@ bot.on('message', (user, userID, channelID, message) => {
           .finally(() => {
             // log the reply and send it
             logger.debug(reply);
-            sendMessage(channelID, reply);
+            msg.channel.send(reply);
           });
         break;
       }
