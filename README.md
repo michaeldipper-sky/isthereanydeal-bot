@@ -5,11 +5,22 @@ Discord Bot for integrating IsThereAnyDeal.com
 
 Makes use of the IsThereAnyDeal API available here: https://itad.docs.apiary.io/#
 
-# Running the bot
+## Prerequisites
+* Node 12
+
+## Running the bot
 * Work out how to add it to your Discord server (Google is your friend)
+* Setup environment variables for IsThereAnyDeal and Discord
+  * `ITAD_API_KEY`: Available after creating an account at https://isthereanydeal.com/dev/app/
+  * `ITAD_BASE_URL`: https://api.isthereanydeal.com/ (at time of writing)
+  * `DISCORD_API_KEY`: Available after creating a Discord bot at https://discordapp.com/developers/applications
 * Run `npm install`
 * Run `npm start`
 
-# Running the unit tests
+## Running the unit tests
 * Run `npm install` (if you haven't already)
 * Run `npm test`
+
+## Troubleshooting
+* Set the logger to debug mode using the `LOGGER_MODE` environment variable: `export LOGGER_MODE=debug`
+* That's it.
