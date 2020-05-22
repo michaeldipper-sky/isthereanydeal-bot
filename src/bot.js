@@ -26,6 +26,11 @@ bot.on('ready', () => {
 
   logger.info('Bot connected and ready!');
   logger.debug(`Logged in as: ${bot.user.tag} - (${bot.user.id})`);
+
+  bot.user.setStatus('available');
+  bot.user.setActivity('for {game title}', {
+    type: 'WATCHING',
+  });
 });
 
 bot.on('message', (msg) => {
