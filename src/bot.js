@@ -47,6 +47,10 @@ bot.on('message', (msg) => {
         logger.debug('pong');
         msg.channel.send('pong');
         break;
+      case 'game title':
+        logger.debug('I knew you would do that');
+        msg.channel.send('I knew you would do that');
+        break;
       default: {
         // run the ITAD logic for each match
         logger.debug(
