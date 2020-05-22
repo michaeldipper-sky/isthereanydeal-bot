@@ -33,12 +33,7 @@ function isThereAnyDeal(game) {
 function searchForTitle(query) {
   const searchResponse = fetchSearchResult(query);
 
-  return searchResponse.then((searchData) => {
-    if ((searchData) && (searchData.data.list.length > 0)) {
-      return searchData.data.list[0].title;
-    }
-    return null;
-  }).catch(() => 'SEARCH_ERROR');
+  return searchResponse.then((searchData) => searchData.data.list[0].title).catch(() => 'SEARCH_ERROR');
 }
 
 module.exports = { isThereAnyDeal, searchForTitle };
