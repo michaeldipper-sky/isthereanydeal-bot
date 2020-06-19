@@ -16,15 +16,15 @@ function fetch(path) {
 }
 
 function fetchPlain(title) {
-  return fetch(plainPath + title);
+  return fetch(plainPath + escape(title));
 }
 
 function fetchPrices(plain) {
-  return fetch(pricePath + plain);
+  return fetch(pricePath + escape(plain));
 }
 
 function fetchSearchResult(title) {
-  return fetch(searchPath + title);
+  return fetch(searchPath + escape(title));
 }
 
 module.exports = { fetchPlain, fetchPrices, fetchSearchResult };
