@@ -43,11 +43,14 @@ bot.on('message', (msg) => {
         logger.debug('pong');
         msg.channel.send('pong');
         break;
-      case 'game title':
-        logger.debug('I knew you would do that');
-        msg.channel.send('I knew you would do that');
-        break;
       default: {
+        // don't do anything if the string is empty
+        if (cmd.length === 0) {
+          logger.debug(`No content provided (called by ${msg.author.tag})`);
+          msg.channel.send('You need to actually provide something to search for :expressionless:');
+          break;
+        }
+
         // run the ITAD logic for each match
         logger.debug(
           `Attemping to find game data for ${cmd} (called by ${msg.author.tag})`,
