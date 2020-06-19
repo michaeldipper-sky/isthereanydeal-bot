@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const logger = require('winston');
 const matcher = require('./matcher');
 const { isThereAnyDeal, searchForTitle } = require('./itad');
-const createHTTPServer = require('./http');
 const { formatPriceMessage } = require('./util/format');
 
 // Configure logger settings
@@ -21,9 +20,6 @@ bot.login(process.env.DISCORD_TOKEN || '');
 logger.debug('Initialised');
 
 bot.on('ready', () => {
-  // create a basic HTTP server so Heroku won't turn off the app :)
-  createHTTPServer();
-
   logger.info('Bot connected and ready!');
   logger.debug(`Logged in as: ${bot.user.tag} - (${bot.user.id})`);
 
