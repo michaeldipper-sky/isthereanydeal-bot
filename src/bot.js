@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const logger = require('winston');
 const matcher = require('./matcher');
 const { isThereAnyDeal } = require('./itad');
-const { fetchCdkeysPrice } = require('./fetch');
+const { cdKeys } = require('./cdkeys');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -27,10 +27,6 @@ bot.on('ready', () => {
   bot.user.setActivity('for {game title}', {
     type: 'WATCHING',
   });
-});
-
-fetchCdkeysPrice('Escape from Tarkov').then((res) => {
-  console.log(res.data);
 });
 
 bot.on('message', (msg) => {
@@ -59,8 +55,17 @@ bot.on('message', (msg) => {
         );
         isThereAnyDeal(cmd).then((reply) => {
           logger.debug(reply);
-          msg.channel.send(reply);
+          msg.channel.send(`**ITAD**\n${reply}`);
         });
+
+        logger.debug(
+          `Attemping to find CDKeys data from ${cmd} (called by ${msg.author.tag})`,
+        );
+        cdKeys(cmd).then((reply) => {
+          logger.debug(reply);
+          msg.channel.send(`**CDKeys**\n${reply}`);
+        });
+
         break;
       }
     }
