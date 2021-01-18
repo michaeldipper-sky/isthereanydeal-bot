@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { fetchPlain } = require('../src/fetch');
+const { fetchItadPlain } = require('../src/fetch');
 
 jest.mock('axios');
 
@@ -17,7 +17,7 @@ test('API returns a plain for a game that exists', () => {
 
   axios.get.mockResolvedValue(expectedResponse);
 
-  return fetchPlain('Astroneer').then((data) => {
+  return fetchItadPlain('Astroneer').then((data) => {
     expect(data).toEqual({ plain });
   });
 });
