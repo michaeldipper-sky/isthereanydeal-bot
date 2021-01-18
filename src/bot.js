@@ -59,7 +59,7 @@ bot.on('message', (msg) => {
         });
 
         logger.debug(
-          `Attemping to find CDKeys data from ${cmd} (called by ${msg.author.tag})`,
+          `Attemping to find CDKeys data for ${cmd} (called by ${msg.author.tag})`,
         );
         cdKeys(cmd).then((reply) => {
           logger.debug(reply);
