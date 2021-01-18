@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
 const logger = require('winston');
 const matcher = require('./matcher');
-const { isThereAnyDeal, searchForTitle } = require('./itad');
-const { formatPriceMessage } = require('./util/format');
+const { isThereAnyDeal } = require('./itad');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -44,48 +43,19 @@ bot.on('message', (msg) => {
         msg.channel.send('pong');
         break;
       default: {
-        // don't do anything if the string is empty
         if (cmd.length === 0) {
           logger.debug(`No content provided (called by ${msg.author.tag})`);
           msg.channel.send('You need to actually provide something to search for :expressionless:');
           break;
         }
 
-        // run the ITAD logic for each match
         logger.debug(
-          `Attemping to find game data for ${cmd} (called by ${msg.author.tag})`,
+          `Attemping to find ITAD data for ${cmd} (called by ${msg.author.tag})`,
         );
-        let reply;
-        isThereAnyDeal(cmd)
-          .then((gamePrice) => {
-            // build the reply based on the respose from the API
-            if (gamePrice === 'PARSE_ERROR') {
-              return searchForTitle(cmd);
-            }
-            if (gamePrice === 'NO_ITAD') {
-              reply = "Couldn't connect to ITAD :grimacing: Please try again later!";
-            } else {
-              reply = formatPriceMessage(cmd, gamePrice);
-              logger.info(`Got data for ${cmd}: ${gamePrice.name}`);
-            }
-            return 'NOT_REQUIRED';
-          })
-          .then((searchResult) => {
-            if (searchResult === 'SEARCH_ERROR') {
-              reply = 'Error parsing price data. The game may not be for sale.';
-            } else if (searchResult !== 'NOT_REQUIRED') {
-              reply = `Couldn't find that :thinking: Did you mean ${searchResult}?`;
-            }
-          })
-          .catch(() => {
-            // no match from the API
-            reply = `Couldn't find a match for ${cmd} :disappointed:`;
-          })
-          .finally(() => {
-            // log the reply and send it
-            logger.debug(reply);
-            msg.channel.send(reply);
-          });
+        isThereAnyDeal(cmd).then((reply) => {
+          logger.debug(reply);
+          msg.channel.send(reply);
+        });
         break;
       }
     }
