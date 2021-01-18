@@ -1,7 +1,8 @@
+const logger = require('winston');
 const { fetchPlain, fetchPrices, fetchSearchResult } = require('./fetch');
-const { formatPriceData } = require('./util/format');
+const { formatPriceData, formatPriceMessage } = require('./util/format');
 
-function isThereAnyDeal(game) {
+function getPriceData(game) {
   // hit the API to find the plain for the specified game
   const plainResponse = fetchPlain(game);
 
@@ -36,4 +37,30 @@ function searchForTitle(query) {
   return searchResponse.then((searchData) => searchData.data.list[0].title).catch(() => 'SEARCH_ERROR');
 }
 
-module.exports = { isThereAnyDeal, searchForTitle };
+function isThereAnyDeal(cmd) {
+  let searched = 0;
+  return getPriceData(cmd)
+    .then((gamePrice) => {
+      if (gamePrice === 'PARSE_ERROR') {
+        searched = 1;
+        return searchForTitle(cmd);
+      }
+      if (gamePrice === 'NO_ITAD') {
+        return "Couldn't connect to ITAD :grimacing: Please try again later!";
+      }
+      logger.info(`Got data for ${cmd}: ${gamePrice.name}`);
+      return formatPriceMessage(cmd, gamePrice);
+    })
+    .then((searchResultOrPriceMessage) => {
+      if (searchResultOrPriceMessage === 'SEARCH_ERROR') {
+        return 'Error parsing price data. The game may not be for sale.';
+      }
+      if (searched) {
+        return `Couldn't find that :thinking: Did you mean ${searchResultOrPriceMessage}?`;
+      }
+      return searchResultOrPriceMessage;
+    })
+    .catch(() => `Couldn't find a match for ${cmd} :disappointed:`);
+}
+
+module.exports = { isThereAnyDeal };
