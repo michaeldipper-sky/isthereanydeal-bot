@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const logger = require('winston');
 const matcher = require('./matcher');
 const { isThereAnyDeal } = require('./itad');
+const { cdKeys } = require('./cdkeys');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -54,8 +55,17 @@ bot.on('message', (msg) => {
         );
         isThereAnyDeal(cmd).then((reply) => {
           logger.debug(reply);
-          msg.channel.send(reply);
+          msg.channel.send(`**ITAD**\n${reply}`);
         });
+
+        logger.debug(
+          `Attemping to find CDKeys data for ${cmd} (called by ${msg.author.tag})`,
+        );
+        cdKeys(cmd).then((reply) => {
+          logger.debug(reply);
+          msg.channel.send(`**CDKeys**\n${reply}`);
+        });
+
         break;
       }
     }
