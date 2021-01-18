@@ -1,16 +1,16 @@
 const logger = require('winston');
-const { fetchPlain, fetchPrices, fetchSearchResult } = require('./fetch');
+const { fetchItadPlain, fetchItadPrices, fetchItadSearchResult } = require('./fetch');
 const { formatPriceData, formatPriceMessage } = require('./util/format');
 
 function getPriceData(game) {
   // hit the API to find the plain for the specified game
-  const plainResponse = fetchPlain(game);
+  const plainResponse = fetchItadPlain(game);
 
   return plainResponse.then((plainData) => {
     // if we get a response from the API and a match
     if (plainData && plainData['.meta'].match) {
       // hit the price endpoint
-      const priceResponse = fetchPrices(plainData.data.plain);
+      const priceResponse = fetchItadPrices(plainData.data.plain);
       return priceResponse;
     }
     // else quit out
@@ -32,7 +32,7 @@ function getPriceData(game) {
 }
 
 function searchForTitle(query) {
-  const searchResponse = fetchSearchResult(query);
+  const searchResponse = fetchItadSearchResult(query);
 
   return searchResponse.then((searchData) => searchData.data.list[0].title).catch(() => 'SEARCH_ERROR');
 }

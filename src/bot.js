@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const logger = require('winston');
 const matcher = require('./matcher');
 const { isThereAnyDeal } = require('./itad');
+const { fetchCdkeysPrice } = require('./fetch');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -26,6 +27,10 @@ bot.on('ready', () => {
   bot.user.setActivity('for {game title}', {
     type: 'WATCHING',
   });
+});
+
+fetchCdkeysPrice('Escape from Tarkov').then((res) => {
+  console.log(res.data);
 });
 
 bot.on('message', (msg) => {
