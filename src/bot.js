@@ -34,7 +34,7 @@ bot.on('message', (msg) => {
   // use the regex matcher to get the commands
   const commands = matcher(msg.content);
 
-  commands.forEach(async (cmd) => {
+  commands.forEach((cmd) => {
     logger.debug(`Executing command: ${cmd}`);
 
     switch (cmd) {
