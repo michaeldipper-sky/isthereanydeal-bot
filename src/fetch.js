@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const plainPath = 'v02/game/plain/?title=';
-const pricePath = 'v01/game/overview/?region=uk&country=UK&plains=';
+const pricePath = 'v01/game/overview/?region=uk&country=GB&plains=';
 const searchPath = 'v01/search/search/?offset=0&limit=1&region=uk&country=UK&q=';
 
 function buildItadURL(path) {
