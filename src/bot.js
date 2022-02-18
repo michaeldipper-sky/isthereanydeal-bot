@@ -30,7 +30,9 @@ bot.on('ready', () => {
 });
 
 bot.on('message', (msg) => {
-  if (msg.author.id !== '682941502673911871') logger.debug(`Message received: ${msg.content}`);
+  if (msg.author.id !== '682941502673911871') {
+    logger.debug(`Message received: ${msg.content}`);
+  }
 
   // use the regex matcher to get the commands
   const commands = matcher(msg.content);
@@ -46,7 +48,9 @@ bot.on('message', (msg) => {
       default: {
         if (cmd.length === 0) {
           logger.debug(`No content provided (called by ${msg.author.tag})`);
-          msg.channel.send('You need to actually provide something to search for :expressionless:');
+          msg.channel.send(
+            'You need to actually provide something to search for :expressionless:',
+          );
           break;
         }
 
@@ -55,7 +59,7 @@ bot.on('message', (msg) => {
         );
         isThereAnyDeal(cmd).then((reply) => {
           logger.debug(reply);
-          msg.channel.send(`**ITAD**\n${reply}`);
+          msg.channel.send(reply);
         });
 
         logger.debug(
@@ -63,7 +67,7 @@ bot.on('message', (msg) => {
         );
         cdKeys(cmd).then((reply) => {
           logger.debug(reply);
-          msg.channel.send(`**CDKeys**\n${reply}`);
+          msg.channel.send(reply);
         });
 
         break;

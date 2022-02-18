@@ -15,6 +15,7 @@
     "winston": "^3.2.1"
   },
   "scripts": {
+    "dev": "nodemon src/bot.js",
     "start": "node src/bot.js",
     "test": "jest"
   }
