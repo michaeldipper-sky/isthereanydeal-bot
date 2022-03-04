@@ -37,7 +37,7 @@ bot.on('message', (msg) => {
   // use the regex matcher to get the commands
   const commands = matcher(msg.content);
 
-  commands.forEach((cmd) => {
+  commands.forEach(async (cmd) => {
     logger.debug(`Executing command: ${cmd}`);
 
     switch (cmd) {
@@ -57,18 +57,17 @@ bot.on('message', (msg) => {
         logger.debug(
           `Attemping to find ITAD data for ${cmd} (called by ${msg.author.tag})`,
         );
-        isThereAnyDeal(cmd).then((reply) => {
-          logger.debug(reply);
-          msg.channel.send(reply);
-        });
+        const itadReply = await isThereAnyDeal(cmd);
+        logger.debug(itadReply);
 
         logger.debug(
           `Attemping to find CDKeys data for ${cmd} (called by ${msg.author.tag})`,
         );
-        cdKeys(cmd).then((reply) => {
-          logger.debug(reply);
-          msg.channel.send(reply);
-        });
+        const cdKeysReply = await cdKeys(cmd);
+        logger.debug(cdKeysReply);
+
+        msg.channel.send(itadReply);
+        msg.channel.send(cdKeysReply);
 
         break;
       }
