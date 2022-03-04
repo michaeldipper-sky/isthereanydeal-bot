@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
-const logger = require("winston");
-const matcher = require("./matcher");
-const { isThereAnyDeal } = require("./itad");
-const { cdKeys } = require("./cdkeys");
+const Discord = require('discord.js');
+const logger = require('winston');
+const matcher = require('./matcher');
+const { isThereAnyDeal } = require('./itad');
+const { cdKeys } = require('./cdkeys');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -10,27 +10,27 @@ logger.add(new logger.transports.Console(), {
   colorize: true,
 });
 
-logger.level = process.env.LOGGER_MODE || "info";
-logger.info("Starting bot...");
+logger.level = process.env.LOGGER_MODE || 'info';
+logger.info('Starting bot...');
 
 // Initialize Discord Bot
 const bot = new Discord.Client();
-bot.login(process.env.DISCORD_TOKEN || "");
+bot.login(process.env.DISCORD_TOKEN || '');
 
-logger.debug("Initialised");
+logger.debug('Initialised');
 
-bot.on("ready", () => {
-  logger.info("Bot connected and ready!");
+bot.on('ready', () => {
+  logger.info('Bot connected and ready!');
   logger.debug(`Logged in as: ${bot.user.tag} - (${bot.user.id})`);
 
-  bot.user.setStatus("available");
-  bot.user.setActivity("for {game title}", {
-    type: "WATCHING",
+  bot.user.setStatus('available');
+  bot.user.setActivity('for {game title}', {
+    type: 'WATCHING',
   });
 });
 
-bot.on("message", (msg) => {
-  if (msg.author.id !== "682941502673911871") {
+bot.on('message', (msg) => {
+  if (msg.author.id !== '682941502673911871') {
     logger.debug(`Message received: ${msg.content}`);
   }
 
@@ -41,27 +41,27 @@ bot.on("message", (msg) => {
     logger.debug(`Executing command: ${cmd}`);
 
     switch (cmd) {
-      case "ping":
-        logger.debug("pong");
-        msg.channel.send("pong");
+      case 'ping':
+        logger.debug('pong');
+        msg.channel.send('pong');
         break;
       default: {
         if (cmd.length === 0) {
           logger.debug(`No content provided (called by ${msg.author.tag})`);
           msg.channel.send(
-            "You need to actually provide something to search for :expressionless:"
+            'You need to actually provide something to search for :expressionless:',
           );
           break;
         }
 
         logger.debug(
-          `Attemping to find ITAD data for ${cmd} (called by ${msg.author.tag})`
+          `Attemping to find ITAD data for ${cmd} (called by ${msg.author.tag})`,
         );
         const itadReply = await isThereAnyDeal(cmd);
         logger.debug(itadReply);
 
         logger.debug(
-          `Attemping to find CDKeys data for ${cmd} (called by ${msg.author.tag})`
+          `Attemping to find CDKeys data for ${cmd} (called by ${msg.author.tag})`,
         );
         const cdKeysReply = await cdKeys(cmd);
         logger.debug(cdKeysReply);
