@@ -30,12 +30,12 @@ bot.on('ready', () => {
 });
 
 bot.on('message', (msg) => {
-  if (msg.author.id !== '682941502673911871') logger.debug(`Message received: ${msg.content}`);
+  if (msg.author.id !== '682941502673911871') { logger.debug(`Message received: ${msg.content}`); }
 
   // use the regex matcher to get the commands
   const commands = matcher(msg.content);
 
-  commands.forEach((cmd) => {
+  commands.forEach(async (cmd) => {
     logger.debug(`Executing command: ${cmd}`);
 
     switch (cmd) {
@@ -46,25 +46,26 @@ bot.on('message', (msg) => {
       default: {
         if (cmd.length === 0) {
           logger.debug(`No content provided (called by ${msg.author.tag})`);
-          msg.channel.send('You need to actually provide something to search for :expressionless:');
+          msg.channel.send(
+            'You need to actually provide something to search for :expressionless:',
+          );
           break;
         }
 
         logger.debug(
           `Attemping to find ITAD data for ${cmd} (called by ${msg.author.tag})`,
         );
-        isThereAnyDeal(cmd).then((reply) => {
-          logger.debug(reply);
-          msg.channel.send(`**ITAD**\n${reply}`);
-        });
+        const itadReply = await isThereAnyDeal(cmd);
+        logger.debug(itadReply);
 
         logger.debug(
           `Attemping to find CDKeys data for ${cmd} (called by ${msg.author.tag})`,
         );
-        cdKeys(cmd).then((reply) => {
-          logger.debug(reply);
-          msg.channel.send(`**CDKeys**\n${reply}`);
-        });
+        const cdKeysReply = await cdKeys(cmd);
+        logger.debug(cdKeysReply);
+
+        msg.channel.send(itadReply);
+        msg.channel.send(cdKeysReply);
 
         break;
       }
