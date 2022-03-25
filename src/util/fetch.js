@@ -5,9 +5,8 @@ const pricePath = 'v01/game/overview/?region=uk&country=GB&plains=';
 const searchPath = 'v01/search/search/?offset=0&limit=1&region=uk&country=UK&q=';
 
 function buildItadURL(path) {
-  const baseURL = process.env.ITAD_BASE_URL || 'https://api.isthereanydeal.com/';
-  const APIKey = process.env.ITAD_API_KEY || '';
-  const url = `${baseURL}${path}&key=${APIKey}`;
+  const apiKey = process.env.ITAD_API_KEY || '';
+  const url = `https://api.isthereanydeal.com/${path}&key=${apiKey}`;
   return url;
 }
 

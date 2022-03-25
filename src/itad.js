@@ -3,7 +3,7 @@ const {
   fetchItadPlain,
   fetchItadPrices,
   fetchItadSearchResult,
-} = require('./fetch');
+} = require('./util/fetch');
 const { buildEmbed } = require('./util/build-embed');
 const { formatPriceData } = require('./util/format');
 

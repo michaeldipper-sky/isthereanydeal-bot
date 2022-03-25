@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const logger = require('winston');
-const matcher = require('./matcher');
+const matcher = require('./util/matcher');
 const { isThereAnyDeal } = require('./itad');
 const { cdKeys } = require('./cdkeys');
 

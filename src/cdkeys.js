@@ -1,5 +1,5 @@
 const logger = require('winston');
-const { fetchCdkeysPrice } = require('./fetch');
+const { fetchCdkeysPrice } = require('./util/fetch');
 const { buildEmbed } = require('./util/build-embed');
 
 function cdKeys(cmd) {
