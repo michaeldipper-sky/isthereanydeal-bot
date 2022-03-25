@@ -11,7 +11,7 @@ const generateGamePassJson = async () => {
     return { title };
   });
 
-  fs.writeFile('gamePassGames.json', JSON.stringify(gameTitles), 'utf8', (err) => {
+  fs.writeFile('game-pass-games.json', JSON.stringify(gameTitles), 'utf8', (err) => {
     if (err) {
       logger.error(err);
     }

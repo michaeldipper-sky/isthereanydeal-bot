@@ -22,4 +22,4 @@ function cdKeys(cmd) {
   });
 }
 
-module.exports = { cdKeys };
+module.exports = cdKeys;

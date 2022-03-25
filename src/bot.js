@@ -4,7 +4,8 @@ const { CronJob } = require('cron');
 const matcher = require('./util/matcher');
 const generateGamePassJson = require('./util/generate-game-pass-json');
 const { isThereAnyDeal } = require('./itad');
-const { cdKeys } = require('./cdkeys');
+const cdKeys = require('./cd-keys');
+const gamePass = require('./game-pass');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -15,6 +16,7 @@ logger.add(new logger.transports.Console(), {
 logger.level = process.env.LOGGER_MODE || 'info';
 logger.info('Starting bot...');
 
+generateGamePassJson();
 const job = new CronJob(
   '0 0 4 * * *',
   generateGamePassJson,
@@ -74,6 +76,12 @@ bot.on('message', (msg) => {
         );
         const cdKeysReply = await cdKeys(cmd);
         logger.debug(cdKeysReply);
+
+        const gamePassReplies = gamePass(cmd);
+
+        gamePassReplies.forEach((reply) => {
+          msg.channel.send(reply);
+        });
 
         msg.channel.send(itadReply);
         msg.channel.send(cdKeysReply);
