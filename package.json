@@ -6,6 +6,7 @@
   "author": "Michael Dipper",
   "dependencies": {
     "axios": "^0.21.4",
+    "cron": "^1.8.2",
     "discord.js": "^12.5.3",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.2.1",

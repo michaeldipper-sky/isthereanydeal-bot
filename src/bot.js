@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const logger = require('winston');
+const { CronJob } = require('cron');
 const matcher = require('./util/matcher');
+const generateGamePassJson = require('./util/generate-game-pass-json');
 const { isThereAnyDeal } = require('./itad');
 const { cdKeys } = require('./cdkeys');
 
@@ -12,6 +14,17 @@ logger.add(new logger.transports.Console(), {
 
 logger.level = process.env.LOGGER_MODE || 'info';
 logger.info('Starting bot...');
+
+// Initialize cron job for Game Pass JSON
+// Updates every day at 4am
+const job = new CronJob(
+  '0 0 4 * * *',
+  generateGamePassJson,
+  null,
+  true,
+  'Europe/London',
+);
+job.start();
 
 // Initialize Discord Bot
 const bot = new Discord.Client();

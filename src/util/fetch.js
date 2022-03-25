@@ -57,6 +57,27 @@ function fetchCdkeysPrice(title) {
   );
 }
 
+function fetchGamePassIds() {
+  return axios
+    .get(
+      'https://catalog.gamepass.com/sigls/v2?id=fdd9e2a7-0fee-49f6-ad69-4354098401ff&language=en-gb&market=GB',
+    )
+    .then((resp) => resp.data);
+}
+
+function fetchGamePassGames(ids) {
+  return axios
+    .get(
+      `https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds=${ids}&market=GB&languages=en-gb&MS-CV=DGU1mcuYo0WMMp+F.1`,
+    )
+    .then((resp) => resp.data);
+}
+
 module.exports = {
-  fetchItadPlain, fetchItadPrices, fetchItadSearchResult, fetchCdkeysPrice,
+  fetchItadPlain,
+  fetchItadPrices,
+  fetchItadSearchResult,
+  fetchCdkeysPrice,
+  fetchGamePassIds,
+  fetchGamePassGames,
 };
