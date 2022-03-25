@@ -15,8 +15,6 @@ logger.add(new logger.transports.Console(), {
 logger.level = process.env.LOGGER_MODE || 'info';
 logger.info('Starting bot...');
 
-// Initialize cron job for Game Pass JSON
-// Updates every day at 4am
 const job = new CronJob(
   '0 0 4 * * *',
   generateGamePassJson,
@@ -26,7 +24,6 @@ const job = new CronJob(
 );
 job.start();
 
-// Initialize Discord Bot
 const bot = new Discord.Client();
 bot.login(process.env.DISCORD_TOKEN || '');
 
@@ -47,7 +44,6 @@ bot.on('message', (msg) => {
     logger.debug(`Message received: ${msg.content}`);
   }
 
-  // use the regex matcher to get the commands
   const commands = matcher(msg.content);
 
   commands.forEach(async (cmd) => {
