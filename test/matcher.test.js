@@ -1,4 +1,4 @@
-const matcher = require('../src/matcher');
+const matcher = require('../src/util/matcher');
 
 test('returns substrings enclosed by curly braces', () => {
   expect(matcher('Hello, {world}!')[0]).toBe('world');
