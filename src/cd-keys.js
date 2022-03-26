@@ -1,4 +1,3 @@
-const logger = require('winston');
 const { fetchCdkeysPrice } = require('./util/fetch');
 const { buildEmbed } = require('./util/build-embed');
 
@@ -17,7 +16,6 @@ function cdKeys(cmd) {
 
       return cdKeysEmbed;
     }
-    logger.debug(`Nothing found on CDKeys for ${cmd}`);
     return `Couldn't find a match for ${cmd} on CDKeys :disappointed:`;
   });
 }

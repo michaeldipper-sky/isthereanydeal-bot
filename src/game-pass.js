@@ -1,5 +1,6 @@
 const logger = require('winston');
 const Fuse = require('fuse.js');
+const { buildEmbed } = require('./util/build-embed');
 
 function gamePass(query) {
   try {
@@ -16,7 +17,12 @@ function gamePass(query) {
     const fuse = new Fuse(games, options);
     const result = fuse.search(query);
 
-    return result.map((game) => `${game.item.title} :white_check_mark:`);
+    if (result.length === 0) {
+      return null;
+    }
+
+    const gameTitles = result.slice(0, 3).map((game) => `• ${game.item.title}`);
+    return buildEmbed(null, 'PC Game Pass', null, gameTitles.join('\n'), result[0].item.boxArtUri);
   } catch (err) {
     logger.error(err);
     return null;

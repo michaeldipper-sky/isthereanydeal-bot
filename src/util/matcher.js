@@ -1,3 +1,5 @@
+const logger = require('winston');
+
 const findCurlyBracesRegex = /\{.*?\}/g;
 const removeCurlyBracesRegex = /{|}/g;
 
@@ -11,7 +13,10 @@ function matcher(message) {
   while (messageMatch) {
     const cmd = messageMatch[0].replace(removeCurlyBracesRegex, '');
     // only add unique commands
-    if (!commands.includes(cmd)) commands.push(cmd);
+    if (!commands.includes(cmd)) {
+      logger.debug(`Adding ${cmd} to command list`);
+      commands.push(cmd.trim());
+    }
 
     // look for the next match, if any
     messageMatch = findCurlyBracesRegex.exec(message);

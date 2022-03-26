@@ -8,7 +8,9 @@ const generateGamePassJson = async () => {
 
   const gameTitles = games.map((data) => {
     const title = data.LocalizedProperties[0].ProductTitle;
-    return { title };
+    const boxArt = data.LocalizedProperties[0].Images.find((image) => image.ImagePurpose === 'BoxArt');
+    const boxArtUri = boxArt ? `https:${boxArt.Uri}` : null;
+    return { title, boxArtUri };
   });
 
   fs.writeFile('game-pass-games.json', JSON.stringify(gameTitles), 'utf8', (err) => {

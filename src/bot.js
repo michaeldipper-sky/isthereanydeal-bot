@@ -49,42 +49,27 @@ bot.on('message', (msg) => {
   const commands = matcher(msg.content);
 
   commands.forEach(async (cmd) => {
-    logger.debug(`Executing command: ${cmd}`);
+    logger.debug(`Executing command: ${cmd} (called by ${msg.author.tag})`);
 
     switch (cmd) {
       case 'ping':
-        logger.debug('pong');
         msg.channel.send('pong');
         break;
       default: {
         if (cmd.length === 0) {
-          logger.debug(`No content provided (called by ${msg.author.tag})`);
           msg.channel.send(
             'You need to actually provide something to search for :expressionless:',
           );
           break;
         }
 
-        logger.debug(
-          `Attemping to find ITAD data for ${cmd} (called by ${msg.author.tag})`,
-        );
         const itadReply = await isThereAnyDeal(cmd);
-        logger.debug(itadReply);
-
-        logger.debug(
-          `Attemping to find CDKeys data for ${cmd} (called by ${msg.author.tag})`,
-        );
         const cdKeysReply = await cdKeys(cmd);
-        logger.debug(cdKeysReply);
-
-        const gamePassReplies = gamePass(cmd);
-
-        gamePassReplies.forEach((reply) => {
-          msg.channel.send(reply);
-        });
+        const gamePassReply = gamePass(cmd);
 
         msg.channel.send(itadReply);
         msg.channel.send(cdKeysReply);
+        if (gamePassReply) msg.channel.send(gamePassReply);
 
         break;
       }
