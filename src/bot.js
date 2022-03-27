@@ -1,8 +1,11 @@
 const Discord = require('discord.js');
 const logger = require('winston');
-const matcher = require('./matcher');
+const { CronJob } = require('cron');
+const matcher = require('./util/matcher');
+const generateGamePassJson = require('./util/generate-game-pass-json');
 const { isThereAnyDeal } = require('./itad');
-const { cdKeys } = require('./cdkeys');
+const cdKeys = require('./cd-keys');
+const gamePass = require('./game-pass');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -13,7 +16,16 @@ logger.add(new logger.transports.Console(), {
 logger.level = process.env.LOGGER_MODE || 'info';
 logger.info('Starting bot...');
 
-// Initialize Discord Bot
+generateGamePassJson();
+const job = new CronJob(
+  '0 0 4 * * *',
+  generateGamePassJson,
+  null,
+  true,
+  'Europe/London',
+);
+job.start();
+
 const bot = new Discord.Client();
 bot.login(process.env.DISCORD_TOKEN || '');
 
@@ -34,40 +46,30 @@ bot.on('message', (msg) => {
     logger.debug(`Message received: ${msg.content}`);
   }
 
-  // use the regex matcher to get the commands
   const commands = matcher(msg.content);
 
   commands.forEach(async (cmd) => {
-    logger.debug(`Executing command: ${cmd}`);
+    logger.debug(`Executing command: ${cmd} (called by ${msg.author.tag})`);
 
     switch (cmd) {
       case 'ping':
-        logger.debug('pong');
         msg.channel.send('pong');
         break;
       default: {
         if (cmd.length === 0) {
-          logger.debug(`No content provided (called by ${msg.author.tag})`);
           msg.channel.send(
             'You need to actually provide something to search for :expressionless:',
           );
           break;
         }
 
-        logger.debug(
-          `Attemping to find ITAD data for ${cmd} (called by ${msg.author.tag})`,
-        );
         const itadReply = await isThereAnyDeal(cmd);
-        logger.debug(itadReply);
-
-        logger.debug(
-          `Attemping to find CDKeys data for ${cmd} (called by ${msg.author.tag})`,
-        );
         const cdKeysReply = await cdKeys(cmd);
-        logger.debug(cdKeysReply);
+        const gamePassReply = gamePass(cmd);
 
         msg.channel.send(itadReply);
         msg.channel.send(cdKeysReply);
+        if (gamePassReply) msg.channel.send(gamePassReply);
 
         break;
       }

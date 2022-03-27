@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { fetchItadPlain } = require('../src/fetch');
+const { fetchItadPlain } = require('../src/util/fetch');
 
 jest.mock('axios');
 

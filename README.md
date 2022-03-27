@@ -12,7 +12,6 @@ Makes use of the IsThereAnyDeal API available here: https://itad.docs.apiary.io/
 * Work out how to add it to your Discord server (Google is your friend)
 * Setup environment variables for IsThereAnyDeal and Discord
   * `ITAD_API_KEY`: Available after creating an account at https://isthereanydeal.com/dev/app/
-  * `ITAD_BASE_URL`: https://api.isthereanydeal.com/ (at time of writing)
   * `DISCORD_TOKEN`: Available after creating a Discord bot at https://discordapp.com/developers/applications
 * Run `npm install`
 * Run `npm start`

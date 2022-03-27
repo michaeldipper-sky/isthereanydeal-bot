@@ -3,7 +3,7 @@ const {
   fetchItadPlain,
   fetchItadPrices,
   fetchItadSearchResult,
-} = require('./fetch');
+} = require('./util/fetch');
 const { buildEmbed } = require('./util/build-embed');
 const { formatPriceData } = require('./util/format');
 
@@ -13,7 +13,7 @@ function getPriceData(game) {
 
   return plainResponse
     .then((plainData) => {
-      // if we get a response from the API and a match
+      // if we get a response from the plain API and a match
       if (plainData && plainData['.meta'].match) {
         // hit the price endpoint
         const priceResponse = fetchItadPrices(plainData.data.plain);
@@ -23,7 +23,7 @@ function getPriceData(game) {
       return null;
     })
     .then((priceData) => {
-      // if we get a response from the API
+      // if we get a response from the price API
       if (priceData) {
         const formattedPriceData = formatPriceData(game, priceData.data);
         return formattedPriceData;
@@ -35,7 +35,8 @@ function getPriceData(game) {
       if (e.constructor === TypeError) {
         return 'PARSE_ERROR';
       }
-      return 'NO_ITAD';
+      logger.error(e);
+      return 'ITAD_ERROR';
     });
 }
 
@@ -44,7 +45,10 @@ function searchForTitle(query) {
 
   return searchResponse
     .then((searchData) => searchData.data.list[0].title)
-    .catch(() => 'SEARCH_ERROR');
+    .catch((e) => {
+      logger.error(e);
+      return 'SEARCH_ERROR';
+    });
 }
 
 function isThereAnyDeal(cmd) {
@@ -55,10 +59,9 @@ function isThereAnyDeal(cmd) {
         searched = 1;
         return searchForTitle(cmd);
       }
-      if (gamePrice === 'NO_ITAD') {
-        return "Couldn't connect to ITAD :grimacing: Please try again later!";
+      if (gamePrice === 'ITAD_ERROR') {
+        return "Couldn't get a response from ITAD :grimacing: Maybe try again later!";
       }
-      logger.info(`Got data for ${cmd}: ${gamePrice.name}`);
 
       const itadEmbed = buildEmbed(
         `${gamePrice.name}: ${gamePrice.currentPrice} at ${gamePrice.currentStore}`,
@@ -74,7 +77,7 @@ function isThereAnyDeal(cmd) {
         return 'Error parsing price data from ITAD. The game may not be for sale.';
       }
       if (searched) {
-        return `Couldn't find that on ITAD :thinking: Did you mean ${searchResultOrPriceMessage}?`;
+        return isThereAnyDeal(searchResultOrPriceMessage);
       }
       return searchResultOrPriceMessage;
     })
