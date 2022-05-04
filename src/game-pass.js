@@ -10,7 +10,7 @@ function gamePass(query) {
     const options = {
       includeScore: true,
       keys: ['title'],
-      threshold: 0,
+      threshold: 0.1,
       ignoreLocation: true,
     };
 
