@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const logger = require('winston');
 const { CronJob } = require('cron');
-const matcher = require('./util/matcher');
 const generateGamePassJson = require('./util/generate-game-pass-json');
 const { isThereAnyDeal } = require('./itad');
 const cdKeys = require('./cd-keys');
@@ -36,43 +35,48 @@ bot.on('ready', () => {
   logger.debug(`Logged in as: ${bot.user.tag} - (${bot.user.id})`);
 
   bot.user.setStatus('available');
-  bot.user.setActivity('for {game title}', {
+  bot.user.setActivity('for /itad game title', {
     type: 'WATCHING',
   });
 });
 
-bot.on('message', (msg) => {
-  if (msg.author.id !== '682941502673911871') {
-    logger.debug(`Message received: ${msg.content}`);
+const commandRegex = /\/watch (.+)|\/itad (.+)/;
+
+bot.on('message', async (msg) => {
+  if (msg.author.id === '682941502673911871') {
+    return;
   }
 
-  const commands = matcher(msg.content);
+  const commandMatch = msg.content.match(commandRegex);
 
-  commands.forEach(async (cmd) => {
-    logger.debug(`Executing command: ${cmd} (called by ${msg.author.tag})`);
+  if (commandMatch) {
+    logger.debug(`Executing command: ${msg.content} (called by ${msg.author.tag})`);
 
-    switch (cmd) {
-      case 'ping':
-        msg.channel.send('pong');
-        break;
-      default: {
-        if (cmd.length === 0) {
-          msg.channel.send(
-            'You need to actually provide something to search for :expressionless:',
-          );
-          break;
-        }
+    const cmd = msg.content;
+    const game = commandMatch[2];
 
-        const itadReply = await isThereAnyDeal(cmd);
-        const cdKeysReply = await cdKeys(cmd);
-        const gamePassReply = gamePass(cmd);
+    if (cmd.startsWith('/itad')) {
+      const itadReply = await isThereAnyDeal(game);
+      const cdKeysReply = await cdKeys(game);
+      const gamePassReply = gamePass(game);
 
-        msg.channel.send(itadReply);
-        msg.channel.send(cdKeysReply);
-        if (gamePassReply) msg.channel.send(gamePassReply);
+      msg.channel.send(itadReply);
+      msg.channel.send(cdKeysReply);
+      if (gamePassReply) msg.channel.send(gamePassReply);
 
-        break;
-      }
+      return;
     }
-  });
+
+    if (cmd.startsWith('/watch')) {
+      // make normal calls to itad to verify if the game can be found or something?
+      // then add the user id and plain to a JSON - probably a 2d array of [user][game]
+      // probably worth adding the name supplied by the user to the JSON
+      //
+      // will need an unwatch command, and maybe a list command? Oh and a help command!
+      msg.channel.send('Coming soon... :eyes:');
+    }
+
+    return;
+  }
+  msg.channel.send('You need to actually provide something to search for :expressionless:');
 });
