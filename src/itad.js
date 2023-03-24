@@ -7,7 +7,7 @@ const {
 const { buildEmbed } = require('./util/build-embed');
 const { formatPriceData } = require('./util/format');
 
-function getPriceData(game) {
+const getPriceData = (game) => {
   // hit the API to find the plain for the specified game
   const plainResponse = fetchItadPlain(game);
 
@@ -38,9 +38,9 @@ function getPriceData(game) {
       logger.error(e);
       return 'ITAD_ERROR';
     });
-}
+};
 
-function searchForTitle(query) {
+const searchForTitle = (query) => {
   const searchResponse = fetchItadSearchResult(query);
 
   return searchResponse
@@ -49,39 +49,36 @@ function searchForTitle(query) {
       logger.error(e);
       return 'SEARCH_ERROR';
     });
-}
+};
 
-function isThereAnyDeal(cmd) {
-  let searched = 0;
-  return getPriceData(cmd)
-    .then((gamePrice) => {
-      if (gamePrice === 'PARSE_ERROR') {
-        searched = 1;
-        return searchForTitle(cmd);
-      }
-      if (gamePrice === 'ITAD_ERROR') {
-        return "Couldn't get a response from ITAD :grimacing: Maybe try again later!";
-      }
+const isThereAnyDeal = async (game) => {
+  try {
+    const priceData = await getPriceData(game);
 
-      const itadEmbed = buildEmbed(
-        `${gamePrice.name}: ${gamePrice.currentPrice} at ${gamePrice.currentStore}`,
-        'ITAD',
-        gamePrice.currentURL,
-        `Lowest historical price: ${gamePrice.lowestPrice} at ${gamePrice.lowestStore}`,
-      );
+    if (priceData === 'PARSE_ERROR') {
+      const title = await searchForTitle(game);
 
-      return itadEmbed;
-    })
-    .then((searchResultOrPriceMessage) => {
-      if (searchResultOrPriceMessage === 'SEARCH_ERROR') {
+      if (title === 'SEARCH_ERROR') {
         return 'Error parsing price data from ITAD. The game may not be for sale.';
       }
-      if (searched) {
-        return isThereAnyDeal(searchResultOrPriceMessage);
-      }
-      return searchResultOrPriceMessage;
-    })
-    .catch(() => `Couldn't find a match for ${cmd} on ITAD :disappointed:`);
-}
+
+      return isThereAnyDeal(title);
+    }
+    if (priceData === 'ITAD_ERROR') {
+      return "Couldn't get a response from ITAD :grimacing: Maybe try again later!";
+    }
+
+    const itadEmbed = buildEmbed(
+      `${priceData.name}: ${priceData.currentPrice} at ${priceData.currentStore}`,
+      'ITAD',
+      priceData.currentURL,
+      `Lowest historical price: ${priceData.lowestPrice} at ${priceData.lowestStore}`,
+    );
+
+    return itadEmbed;
+  } catch (e) {
+    return `Couldn't find a match for ${game} on ITAD :disappointed:`;
+  }
+};
 
 module.exports = { isThereAnyDeal };
