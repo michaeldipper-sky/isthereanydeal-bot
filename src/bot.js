@@ -46,6 +46,7 @@ bot.on('message', async (msg) => {
   if (msg.author.id === '682941502673911871') {
     return;
   }
+  logger.debug(`Message received: ${msg.content}`);
 
   const commandMatch = msg.content.match(commandRegex);
 
@@ -70,8 +71,5 @@ bot.on('message', async (msg) => {
     if (cmd.startsWith('/watch')) {
       msg.channel.send('Feature coming soon... :eyes:');
     }
-
-    return;
   }
-  msg.channel.send('You need to actually provide something to search for :expressionless:');
 });
