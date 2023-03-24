@@ -50,9 +50,9 @@ bot.on('message', async (msg) => {
   const commandMatch = msg.content.match(commandRegex);
 
   if (commandMatch) {
-    logger.debug(`Executing command: ${msg.content} (called by ${msg.author.tag})`);
-
     const cmd = msg.content;
+    logger.debug(`Executing command: ${cmd} (called by ${msg.author.tag})`);
+
     const game = commandMatch[2];
 
     if (cmd.startsWith('/itad')) {
