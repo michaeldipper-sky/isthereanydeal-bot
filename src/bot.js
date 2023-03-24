@@ -73,7 +73,7 @@ bot.on('message', async (msg) => {
       // probably worth adding the name supplied by the user to the JSON
       //
       // will need an unwatch command, and maybe a list command? Oh and a help command!
-      msg.channel.send('Coming soon... :eyes:');
+      msg.channel.send('Feature coming soon... :eyes:');
     }
 
     return;
