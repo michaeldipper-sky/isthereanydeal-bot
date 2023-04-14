@@ -70,6 +70,11 @@ bot.on('message', async (msg) => {
 
     if (cmd.startsWith('/watch')) {
       msg.channel.send('Feature coming soon... :eyes:');
+      // make normal calls to itad to verify if the game can be found or something?
+      // then add the user id and plain to a JSON - probably a 2d array of [user][game]
+      // probably worth adding the name supplied by the user to the JSON
+      //
+      // will need an unwatch command, and maybe a list command? Oh and a help command!
     }
   }
 });
