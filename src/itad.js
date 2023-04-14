@@ -7,65 +7,49 @@ const {
 const { buildEmbed } = require('./util/build-embed');
 const { formatPriceData } = require('./util/format');
 
-const getPriceData = (game) => {
-  // hit the API to find the plain for the specified game
-  const plainResponse = fetchItadPlain(game);
+const searchForPlain = async (query) => {
+  const searchData = await fetchItadSearchResult(query);
+  logger.debug(`searchData: ${JSON.stringify(searchData)}`);
 
-  return plainResponse
-    .then((plainData) => {
-      // if we get a response from the plain API and a match
-      if (plainData && plainData['.meta'].match) {
-        // hit the price endpoint
-        const priceResponse = fetchItadPrices(plainData.data.plain);
-        return priceResponse;
-      }
-      // else quit out
-      return null;
-    })
-    .then((priceData) => {
-      // if we get a response from the price API
-      if (priceData) {
-        const formattedPriceData = formatPriceData(game, priceData.data);
-        return formattedPriceData;
-      }
-      // else quit out
-      return null;
-    })
-    .catch((e) => {
-      if (e.constructor === TypeError) {
-        return 'PARSE_ERROR';
-      }
-      logger.error(e);
-      return 'ITAD_ERROR';
-    });
+  if (searchData.data.results.length === 0) {
+    return 'NO_SEARCH_RESULTS';
+  }
+
+  return searchData.data.results[0].plain;
 };
 
-const searchForTitle = (query) => {
-  const searchResponse = fetchItadSearchResult(query);
+const getPlain = async (game) => {
+  const plainData = await fetchItadPlain(game);
+  logger.debug(`plainData: ${JSON.stringify(plainData)}`);
 
-  return searchResponse
-    .then((searchData) => searchData.data.list[0].title)
-    .catch((e) => {
-      logger.error(e);
-      return 'SEARCH_ERROR';
-    });
+  if (!plainData || !plainData['.meta'].match) {
+    logger.debug('No match found on plain route, trying search route...');
+    return searchForPlain(game);
+  }
+
+  return plainData.data.plain;
+};
+
+const getPriceData = async (plain) => {
+  const priceData = await fetchItadPrices(plain);
+  logger.debug(`priceData: ${JSON.stringify(priceData)}`);
+
+  const formattedPriceData = formatPriceData(plain, priceData.data);
+  return formattedPriceData;
 };
 
 const isThereAnyDeal = async (game) => {
   try {
-    const priceData = await getPriceData(game);
+    const plain = await getPlain(game);
 
-    if (priceData === 'PARSE_ERROR') {
-      const title = await searchForTitle(game);
-
-      if (title === 'SEARCH_ERROR') {
-        return 'Error parsing price data from ITAD. The game may not be for sale.';
-      }
-
-      return isThereAnyDeal(title);
+    if (plain === 'NO_SEARCH_RESULTS') {
+      return `Couldn't find a match for ${game} on ITAD :disappointed:`;
     }
-    if (priceData === 'ITAD_ERROR') {
-      return "Couldn't get a response from ITAD :grimacing: Maybe try again later!";
+
+    const priceData = await getPriceData(plain);
+
+    if (priceData === 'FORMATTING_ERROR') {
+      return 'Error parsing price data from ITAD, you might need a "standard edition" or similar.';
     }
 
     const itadEmbed = buildEmbed(
@@ -77,7 +61,8 @@ const isThereAnyDeal = async (game) => {
 
     return itadEmbed;
   } catch (e) {
-    return `Couldn't find a match for ${game} on ITAD :disappointed:`;
+    logger.debug(e);
+    return "Couldn't get a response from ITAD :grimacing: Maybe try again later!";
   }
 };
 

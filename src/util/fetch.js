@@ -3,7 +3,7 @@ const logger = require('winston');
 
 const plainPath = 'v02/game/plain/?title=';
 const pricePath = 'v01/game/overview/?region=uk&country=GB&plains=';
-const searchPath = 'v01/search/search/?offset=0&limit=1&region=uk&country=UK&q=';
+const searchPath = 'v02/search/search/?q=';
 
 function buildItadURL(path) {
   const apiKey = process.env.ITAD_API_KEY || '';
