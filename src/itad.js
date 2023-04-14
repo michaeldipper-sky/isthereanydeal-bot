@@ -7,81 +7,63 @@ const {
 const { buildEmbed } = require('./util/build-embed');
 const { formatPriceData } = require('./util/format');
 
-function getPriceData(game) {
-  // hit the API to find the plain for the specified game
-  const plainResponse = fetchItadPlain(game);
+const searchForPlain = async (query) => {
+  const searchData = await fetchItadSearchResult(query);
+  logger.debug(`searchData: ${JSON.stringify(searchData)}`);
 
-  return plainResponse
-    .then((plainData) => {
-      // if we get a response from the plain API and a match
-      if (plainData && plainData['.meta'].match) {
-        // hit the price endpoint
-        const priceResponse = fetchItadPrices(plainData.data.plain);
-        return priceResponse;
-      }
-      // else quit out
-      return null;
-    })
-    .then((priceData) => {
-      // if we get a response from the price API
-      if (priceData) {
-        const formattedPriceData = formatPriceData(game, priceData.data);
-        return formattedPriceData;
-      }
-      // else quit out
-      return null;
-    })
-    .catch((e) => {
-      if (e.constructor === TypeError) {
-        return 'PARSE_ERROR';
-      }
-      logger.error(e);
-      return 'ITAD_ERROR';
-    });
-}
+  if (searchData.data.results.length === 0) {
+    return 'NO_SEARCH_RESULTS';
+  }
 
-function searchForTitle(query) {
-  const searchResponse = fetchItadSearchResult(query);
+  return searchData.data.results[0].plain;
+};
 
-  return searchResponse
-    .then((searchData) => searchData.data.list[0].title)
-    .catch((e) => {
-      logger.error(e);
-      return 'SEARCH_ERROR';
-    });
-}
+const getPlain = async (game) => {
+  const plainData = await fetchItadPlain(game);
+  logger.debug(`plainData: ${JSON.stringify(plainData)}`);
 
-function isThereAnyDeal(cmd) {
-  let searched = 0;
-  return getPriceData(cmd)
-    .then((gamePrice) => {
-      if (gamePrice === 'PARSE_ERROR') {
-        searched = 1;
-        return searchForTitle(cmd);
-      }
-      if (gamePrice === 'ITAD_ERROR') {
-        return "Couldn't get a response from ITAD :grimacing: Maybe try again later!";
-      }
+  if (!plainData || !plainData['.meta'].match) {
+    logger.debug('No match found on plain route, trying search route...');
+    return searchForPlain(game);
+  }
 
-      const itadEmbed = buildEmbed(
-        `${gamePrice.name}: ${gamePrice.currentPrice} at ${gamePrice.currentStore}`,
-        'ITAD',
-        gamePrice.currentURL,
-        `Lowest historical price: ${gamePrice.lowestPrice} at ${gamePrice.lowestStore}`,
-      );
+  return plainData.data.plain;
+};
 
-      return itadEmbed;
-    })
-    .then((searchResultOrPriceMessage) => {
-      if (searchResultOrPriceMessage === 'SEARCH_ERROR') {
-        return 'Error parsing price data from ITAD. The game may not be for sale.';
-      }
-      if (searched) {
-        return isThereAnyDeal(searchResultOrPriceMessage);
-      }
-      return searchResultOrPriceMessage;
-    })
-    .catch(() => `Couldn't find a match for ${cmd} on ITAD :disappointed:`);
-}
+const getPriceData = async (plain) => {
+  const priceData = await fetchItadPrices(plain);
+  logger.debug(`priceData: ${JSON.stringify(priceData)}`);
+
+  const formattedPriceData = formatPriceData(plain, priceData.data);
+  return formattedPriceData;
+};
+
+const isThereAnyDeal = async (game) => {
+  try {
+    const plain = await getPlain(game);
+
+    if (plain === 'NO_SEARCH_RESULTS') {
+      return `Couldn't find a match for ${game} on ITAD :disappointed:`;
+    }
+
+    const priceData = await getPriceData(plain);
+
+    if (priceData === 'FORMATTING_ERROR') {
+      return 'Error parsing price data from ITAD, you might need a "standard edition" or similar.';
+    }
+
+    const itadEmbed = buildEmbed(
+      `${priceData.name}: ${priceData.currentPrice} at ${priceData.currentStore}`,
+      'ITAD',
+      priceData.currentURL,
+      `Lowest historical price: ${priceData.lowestPrice} at ${priceData.lowestStore}`,
+    );
+
+    return itadEmbed;
+  } catch (e) {
+    logger.debug(e);
+    return "Couldn't get a response from ITAD :grimacing: Maybe try again later!";
+  }
+};
 
 module.exports = { isThereAnyDeal };
