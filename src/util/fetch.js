@@ -34,7 +34,7 @@ function fetchItadSearchResult(title) {
   return itadFetch(searchPath + encodeURIComponent(title));
 }
 
-function fetchCdkeysPrice(title) {
+function fetchCdKeysPrice(title) {
   logger.debug('Fetching from CDKeys');
   return axios
     .post(
@@ -67,7 +67,7 @@ function fetchCdkeysPrice(title) {
     )
     .then((resp) => {
       logger.debug(`Fetched from CDKeys with status code ${resp.status}`);
-      return resp;
+      return resp.data;
     });
 }
 
@@ -104,10 +104,12 @@ function fetchGamePassGames(ids) {
 }
 
 module.exports = {
+  buildItadURL,
+  itadFetch,
   fetchItadPlain,
   fetchItadPrices,
   fetchItadSearchResult,
-  fetchCdkeysPrice,
+  fetchCdKeysPrice,
   fetchGamePassIds,
   fetchGamePassGames,
 };
