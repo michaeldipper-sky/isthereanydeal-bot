@@ -2,8 +2,8 @@ const axios = require('axios');
 const {
   buildItadURL, fetchItadPlain, itadFetch, fetchItadPrices, fetchItadSearchResult, fetchCdKeysPrice, fetchGamePassIds, fetchGamePassGames,
 } = require('../../src/util/fetch');
-const mockCdKeysResponse = require('./CdKeysResponse.json');
-const mockGamePassGamesResponse = require('./GamePassGamesResponse.json');
+const mockCdKeysResponse = require('../resources/CdKeysResponse.json');
+const mockGamePassGamesResponse = require('../resources/GamePassGamesResponse.json');
 
 jest.mock('axios');
 
