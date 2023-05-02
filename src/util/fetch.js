@@ -81,9 +81,6 @@ function fetchGamePassIds() {
         `Fetched from ${gamePassIdsUrl} with status code ${resp.status}`,
       );
       return resp.data;
-    })
-    .catch((e) => {
-      logger.error(e);
     });
 }
 
@@ -97,9 +94,6 @@ function fetchGamePassGames(ids) {
         `Fetched from displaycatalog.mp.microsoft.com with status code ${resp.status}`,
       );
       return resp.data;
-    })
-    .catch((e) => {
-      logger.error(e);
     });
 }
 

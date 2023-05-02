@@ -3,8 +3,15 @@ const logger = require('winston');
 const { fetchGamePassIds, fetchGamePassGames } = require('./fetch');
 
 const generateGamePassJson = async () => {
-  const ids = (await fetchGamePassIds()).slice(1);
-  const games = (await fetchGamePassGames(ids.map((data) => data.id).join())).Products;
+  let games;
+
+  try {
+    const ids = (await fetchGamePassIds()).slice(1);
+    games = (await fetchGamePassGames(ids.map((data) => data.id).join())).Products;
+  } catch (e) {
+    logger.error(`Unable to update Game Pass data due to exception (${e})`);
+    return;
+  }
 
   const gameTitles = games.map((data) => {
     const title = data.LocalizedProperties[0].ProductTitle;
