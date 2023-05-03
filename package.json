@@ -19,6 +19,8 @@
   "scripts": {
     "dev": "nodemon src/bot.js",
     "start": "node src/bot.js",
-    "test": "jest"
+    "test": "jest",
+    "test-with-coverage": "jest --coverage",
+    "test-watch": "jest --watch"
   }
 }
