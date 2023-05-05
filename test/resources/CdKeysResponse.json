@@ -1,0 +1,406 @@
+{
+  "results": [
+    {
+      "hits": [
+        {
+          "name": "ASTRONEER PC",
+          "url": "https://www.cdkeys.com/astroneer-pc-steam",
+          "visibility_search": 1,
+          "visibility_catalog": 1,
+          "type_id": "downloadable",
+          "rating_summary": 100,
+          "categories": {
+            "level0": [
+              "PC",
+              "Indie"
+            ],
+            "level1": [
+              "PC /// Games"
+            ]
+          },
+          "categories_without_path": [
+            "Games",
+            "Indie"
+          ],
+          "categoryIds": [
+            "6",
+            "11",
+            "253"
+          ],
+          "thumbnail_url": "https://cdn.cdkeys.com/140x140/media/catalog/product/f/i/fifa-22-pc-game-origin-cover_93_.jpg",
+          "image_url": "https://cdn.cdkeys.com/265x265/media/catalog/product/f/i/fifa-22-pc-game-origin-cover_93_.jpg",
+          "in_stock": "",
+          "sku": "D/ASTRPC",
+          "price": {
+            "ARS": {
+              "default": 6132.69,
+              "default_formated": "$6,132.69",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "$6,158.39"
+            },
+            "AUD": {
+              "default": 47.79,
+              "default_formated": "AU$47.79",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "AU$47.99"
+            },
+            "BRL": {
+              "default": 156.79,
+              "default_formated": "R$156.79",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "R$157.49"
+            },
+            "GBP": {
+              "default": 23.89,
+              "default_formated": "£23.89",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "£23.99"
+            },
+            "CAD": {
+              "default": 40.99,
+              "default_formated": "CA$40.99",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "CA$41.19"
+            },
+            "CLP": {
+              "default": 24611,
+              "default_formated": "$24,611.00",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "$24,714.00"
+            },
+            "CNY": {
+              "default": 206.09,
+              "default_formated": "CN¥206.09",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "CN¥206.89"
+            },
+            "COP": {
+              "default": 143986.39,
+              "default_formated": "$143,986.39",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "$144,589.09"
+            },
+            "CZK": {
+              "default": 661.29,
+              "default_formated": "CZK661.29",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "CZK663.99"
+            },
+            "DKK": {
+              "default": 206.69,
+              "default_formated": "DKK206.69",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "DKK207.49"
+            },
+            "EGP": {
+              "default": 924.29,
+              "default_formated": "EGP924.29",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "EGP928.09"
+            },
+            "EUR": {
+              "default": 27.19,
+              "default_formated": "€27.19",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "€27.39"
+            },
+            "HKD": {
+              "default": 234.69,
+              "default_formated": "HK$234.69",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "HK$235.69"
+            },
+            "HUF": {
+              "default": 10882.99,
+              "default_formated": "HUF10,882.99",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "HUF10,928.49"
+            },
+            "INR": {
+              "default": 2472.39,
+              "default_formated": "₹2,472.39",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "₹2,482.69"
+            },
+            "IDR": {
+              "default": 457436.69,
+              "default_formated": "IDR457,436.69",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "IDR459,351.49"
+            },
+            "ILS": {
+              "default": 109.39,
+              "default_formated": "₪109.39",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "₪109.79"
+            },
+            "JPY": {
+              "default": 3964.59,
+              "default_formated": "¥3,964.59",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "¥3,981.19"
+            },
+            "MYR": {
+              "default": 133.59,
+              "default_formated": "MYR133.59",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "MYR134.09"
+            },
+            "MXN": {
+              "default": 555.99,
+              "default_formated": "MX$555.99",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "MX$558.29"
+            },
+            "NZD": {
+              "default": 48.19,
+              "default_formated": "NZ$48.19",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "NZ$48.39"
+            },
+            "NOK": {
+              "default": 358.39,
+              "default_formated": "NOK358.39",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "NOK359.89"
+            },
+            "PHP": {
+              "default": 1628.09,
+              "default_formated": "₱1,628.09",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "₱1,634.89"
+            },
+            "PLN": {
+              "default": 130.09,
+              "default_formated": "PLN130.09",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "PLN130.59"
+            },
+            "RON": {
+              "default": 136.59,
+              "default_formated": "RON136.59",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "RON137.19"
+            },
+            "SAR": {
+              "default": 112.29,
+              "default_formated": "SAR112.29",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "SAR112.79"
+            },
+            "RSD": {
+              "default": 3254.69,
+              "default_formated": "RSD3,254.69",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "RSD3,268.39"
+            },
+            "SGD": {
+              "default": 39.89,
+              "default_formated": "$39.89",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "$40.09"
+            },
+            "ZAR": {
+              "default": 554.39,
+              "default_formated": "ZAR554.39",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "ZAR556.69"
+            },
+            "KRW": {
+              "default": 39102,
+              "default_formated": "₩39,102.00",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "₩39,266.00"
+            },
+            "SEK": {
+              "default": 309.29,
+              "default_formated": "SEK309.29",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "SEK310.59"
+            },
+            "CHF": {
+              "default": 27.59,
+              "default_formated": "CHF27.59",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "CHF27.69"
+            },
+            "THB": {
+              "default": 1028.89,
+              "default_formated": "฿1,028.89",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "฿1,033.19"
+            },
+            "USD": {
+              "default": 29.39,
+              "default_formated": "$29.39",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "$29.49"
+            },
+            "AED": {
+              "default": 109.89,
+              "default_formated": "AED109.89",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "AED110.29"
+            },
+            "VND": {
+              "default": 703564.69,
+              "default_formated": "₫703,564.69",
+              "special_from_date": 1633305600,
+              "special_to_date": false,
+              "default_original_formated": "₫706,509.69"
+            }
+          },
+          "dlc": "No",
+          "delivery_speed": "Instant Delivery",
+          "platforms": "Steam",
+          "region": "Worldwide",
+          "language": [
+            "Dutch",
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Polish",
+            "Portuguese - Brazil",
+            "Russian",
+            "Simplified Chinese",
+            "Spanish",
+            "Turkish"
+          ],
+          "genres": [
+            "Adventure",
+            "Atmospheric",
+            "Building",
+            "Crafting",
+            "Exploration",
+            "Indie",
+            "Multiplayer",
+            "Open World",
+            "Sandbox",
+            "Sci-fi",
+            "Simulation",
+            "Singleplayer",
+            "Space",
+            "Survival"
+          ],
+          "created_at": "2021-10-04 14:18:52",
+          "restricted_countries": [
+            ""
+          ],
+          "region_id": 39,
+          "algoliaLastUpdateAtCET": "2023-03-24 14:11:49",
+          "objectID": "13184",
+          "_highlightResult": {
+            "name": {
+              "value": "<em>ASTRONEER</em> PC",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": [
+                "astroneer"
+              ]
+            },
+            "categories": {
+              "level0": [
+                {
+                  "value": "PC",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Indie",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ],
+              "level1": [
+                {
+                  "value": "PC /// Games",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            },
+            "categories_without_path": [
+              {
+                "value": "Games",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Indie",
+                "matchLevel": "none",
+                "matchedWords": []
+              }
+            ],
+            "sku": {
+              "value": "D/ASTRPC",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        }
+      ],
+      "nbHits": 1,
+      "page": 0,
+      "nbPages": 1,
+      "hitsPerPage": 20,
+      "exhaustiveNbHits": true,
+      "exhaustiveTypo": true,
+      "exhaustive": {
+        "nbHits": true,
+        "typo": true
+      },
+      "query": "astroneer",
+      "params": "query=astroneer&facetFilters=%5B%5B%22platforms%3ASteam%22%2C%22platforms%3AGOG.com%22%2C%22platforms%3AOrigin%22%2C%22platforms%3AuPlay%22%2C%22platforms%3AEpic+Games+Launcher%22%2C%22platforms%3ADeveloper+Website%22%5D%5D&tagFilters=",
+      "index": "magento2_default_products",
+      "processingTimeMS": 1,
+      "processingTimingsMS": {
+        "fetch": {
+          "total": 1
+        },
+        "request": {
+          "roundTrip": 30
+        },
+        "total": 1
+      },
+      "serverTimeMS": 1
+    }
+  ]
+}

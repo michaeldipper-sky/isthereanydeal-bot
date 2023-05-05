@@ -13,12 +13,14 @@
     "eslint-plugin-import": "^2.25",
     "eslint-plugin-jest": "^23.20",
     "fuse.js": "^6.5",
-    "jest": "^25.5",
+    "jest": "^29.5",
     "winston": "^3.6"
   },
   "scripts": {
     "dev": "nodemon src/bot.js",
     "start": "node src/bot.js",
-    "test": "jest"
+    "test": "jest",
+    "test-with-coverage": "jest --coverage",
+    "test-watch": "jest --watch"
   }
 }
