@@ -2,3 +2,4 @@ node_modules
 coverage
 game-pass-games.json
 watched-games.json
+.DS_Store
