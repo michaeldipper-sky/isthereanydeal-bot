@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const logger = require('winston');
 const { fetchGamePassIds, fetchGamePassGames } = require('./fetch');
 
@@ -9,7 +9,7 @@ const generateGamePassJson = async () => {
     const ids = (await fetchGamePassIds()).slice(1);
     games = (await fetchGamePassGames(ids.map((data) => data.id).join())).Products;
   } catch (e) {
-    logger.error(`Unable to update Game Pass data due to exception (${e})`);
+    logger.error(`Unable to fetch Game Pass data due to exception (${e})`);
     return;
   }
 
@@ -20,12 +20,12 @@ const generateGamePassJson = async () => {
     return { title, boxArtUri };
   });
 
-  fs.writeFile('game-pass-games.json', JSON.stringify(gameTitles), 'utf8', (err) => {
-    if (err) {
-      logger.error(err);
-    }
+  try {
+    await fs.writeFile('game-pass-games.json', JSON.stringify(gameTitles), 'utf8');
     logger.info('Successfully updated game pass data');
-  });
+  } catch (e) {
+    logger.error(`Unable to write Game Pass data due to exception (${e})`);
+  }
 };
 
 module.exports = generateGamePassJson;
