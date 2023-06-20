@@ -1,5 +1,5 @@
 node_modules
 coverage
 game-pass-games.json
-watched-games.json
+watch-list.json
 .DS_Store
