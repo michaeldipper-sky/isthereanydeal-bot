@@ -17,7 +17,7 @@
     "winston": "^3.6"
   },
   "scripts": {
-    "dev": "nodemon src/bot.js",
+    "dev": "nodemon --ignore *.json src/bot.js",
     "start": "node src/bot.js",
     "test": "jest",
     "test-with-coverage": "jest --coverage",

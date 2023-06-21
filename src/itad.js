@@ -38,18 +38,22 @@ const getPriceData = async (plain) => {
   return formattedPriceData;
 };
 
-const isThereAnyDeal = async (game) => {
+const isThereAnyDeal = async (input, plainSupplied = false) => {
   try {
-    const plain = await getPlain(game);
+    let plain = input;
 
-    if (plain === 'NO_SEARCH_RESULTS') {
-      return `Couldn't find a match for ${game} on ITAD :disappointed:`;
+    if (!plainSupplied) {
+      plain = await getPlain(input);
+
+      if (plain === 'NO_SEARCH_RESULTS') {
+        return { message: `Couldn't find a match for ${input} on ITAD :disappointed:`, success: false, plain: null };
+      }
     }
 
     const priceData = await getPriceData(plain);
 
     if (priceData === 'FORMATTING_ERROR') {
-      return 'Error parsing price data from ITAD, you might need a "standard edition" or similar.';
+      return { message: 'Error parsing price data from ITAD, you might need a "standard edition" or similar.', success: false, plain: null };
     }
 
     const itadEmbed = buildEmbed(
@@ -59,10 +63,10 @@ const isThereAnyDeal = async (game) => {
       `Lowest historical price: ${priceData.lowestPrice} at ${priceData.lowestStore}`,
     );
 
-    return itadEmbed;
+    return { message: itadEmbed, success: true, plain };
   } catch (e) {
     logger.debug(e);
-    return "Couldn't get a response from ITAD :grimacing: Maybe try again later!";
+    return { message: "Couldn't get a response from ITAD :grimacing: Maybe try again later!", success: false, plain: null };
   }
 };
 

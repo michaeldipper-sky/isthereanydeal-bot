@@ -62,7 +62,7 @@ bot.on('message', async (msg) => {
       const cdKeysReply = await cdKeys(game);
       const gamePassReply = gamePass(game);
 
-      msg.channel.send(itadReply);
+      msg.channel.send(itadReply.message);
       msg.channel.send(cdKeysReply);
       if (gamePassReply) msg.channel.send(gamePassReply);
 
@@ -76,34 +76,14 @@ bot.on('message', async (msg) => {
       //
       // will need an unwatch command, and maybe a list command? Oh and a help command!
       const itadReply = await isThereAnyDeal(game);
-      itadReply.setFooter(
-        'If this is the correct game, react to this message with 👍 to start watching it!',
-      );
 
-      const watchFilter = (reaction, user) => reaction.emoji.name === '👍' && user.id === msg.author.id;
-      const confirmationMessage = await msg.channel.send(itadReply);
-      const collector = confirmationMessage.createReactionCollector(
-        watchFilter,
-        { max: 1, time: 60000 },
-      );
+      if (!itadReply.success) {
+        msg.channel.send(itadReply.message);
+        return;
+      }
 
-      collector.on('collect', (reaction, user) => {
-        logger.debug(`Collected ${reaction.emoji.name} from ${user.id}`);
-
-        addGameToWatchList(user, game);
-
-        itadReply.setFooter('Watched!');
-        confirmationMessage.edit('', itadReply);
-      });
-
-      collector.on('end', (collected) => {
-        logger.debug(`Collected ${collected.size} items`);
-
-        if (collected.size === 0) {
-          itadReply.setFooter('Expired!');
-          confirmationMessage.edit('', itadReply);
-        }
-      });
+      addGameToWatchList(msg.author, itadReply.plain);
+      msg.channel.send(`${msg.author} is now watching: `, { embed: itadReply.message });
     }
   }
 });
