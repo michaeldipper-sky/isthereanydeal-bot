@@ -70,11 +70,7 @@ bot.on('message', async (msg) => {
     }
 
     if (cmd.startsWith('/watch')) {
-      // make normal calls to itad to verify if the game can be found or something? DONE!
-      // then add the user id and plain to a JSON - probably a 2d array of [user][game]
-      // probably worth adding the name supplied by the user to the JSON
-      //
-      // will need an unwatch command, and maybe a list command? Oh and a help command!
+      // need an unwatch command, and maybe a list command? Oh and a help command!
       const itadReply = await isThereAnyDeal(game);
 
       if (!itadReply.success) {
