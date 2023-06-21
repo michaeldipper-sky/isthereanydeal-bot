@@ -82,8 +82,11 @@ bot.on('message', async (msg) => {
         return;
       }
 
-      addGameToWatchList(msg.author, itadReply.plain);
-      msg.channel.send(`${msg.author} is now watching: `, { embed: itadReply.message });
+      if (await addGameToWatchList(msg.author, itadReply.plain)) {
+        msg.channel.send(`${msg.author} is now watching: `, { embed: itadReply.message });
+      } else {
+        msg.channel.send('Game found but failed to add game to watch list!');
+      }
     }
   }
 });
