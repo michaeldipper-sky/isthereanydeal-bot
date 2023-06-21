@@ -5,6 +5,7 @@ const generateGamePassJson = require('./util/generate-game-pass-json');
 const { isThereAnyDeal } = require('./itad');
 const cdKeys = require('./cd-keys');
 const gamePass = require('./game-pass');
+const { addGameToWatchList } = require('./watch');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -40,7 +41,7 @@ bot.on('ready', () => {
   });
 });
 
-const commandRegex = /\/watch (.+)|\/itad (.+)/;
+const commandRegex = /(\/watch|\/itad) (.+)/;
 
 bot.on('message', async (msg) => {
   if (msg.author.id === '682941502673911871') {
@@ -61,7 +62,7 @@ bot.on('message', async (msg) => {
       const cdKeysReply = await cdKeys(game);
       const gamePassReply = gamePass(game);
 
-      msg.channel.send(itadReply);
+      msg.channel.send(itadReply.message);
       msg.channel.send(cdKeysReply);
       if (gamePassReply) msg.channel.send(gamePassReply);
 
@@ -69,7 +70,19 @@ bot.on('message', async (msg) => {
     }
 
     if (cmd.startsWith('/watch')) {
-      msg.channel.send('Feature coming soon... :eyes:');
+      // need an unwatch command, and maybe a list command? Oh and a help command!
+      const itadReply = await isThereAnyDeal(game);
+
+      if (!itadReply.success) {
+        msg.channel.send(itadReply.message);
+        return;
+      }
+
+      if (await addGameToWatchList(msg.author, itadReply.plain)) {
+        msg.channel.send(`${msg.author} is now watching: `, { embed: itadReply.message });
+      } else {
+        msg.channel.send('Game found but failed to add game to watch list!');
+      }
     }
   }
 });
