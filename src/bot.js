@@ -69,7 +69,7 @@ bot.on('message', async (msg) => {
     }
 
     if (cmd.startsWith('/watch')) {
-      msg.channel.send('Feature coming soon... :eyes:');
+      msg.channel.send('Feature coming soon(tm)... :eyes:');
     }
   }
 });
