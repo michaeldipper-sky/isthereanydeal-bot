@@ -5,7 +5,7 @@
   "main": "bot.js",
   "author": "Michael Dipper",
   "dependencies": {
-    "axios": "^0.21",
+    "axios": "^1.13",
     "cron": "^1.8",
     "discord.js": "^12.5",
     "eslint": "^6.8",
